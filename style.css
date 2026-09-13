@@ -1,0 +1,760 @@
+/* 특정 폰트 설정 */
+@import url('https://fonts.googleapis.com/css2?family=Sniglet:wght@400;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Jua&family=Sniglet:wght@400;800&display=swap');
+
+/* 전체 적용 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 폰트 적용 */
+body {
+  font-family: "Sniglet", "Jua";
+}
+input {
+  font-family: inherit;
+}
+button {
+  font-family: inherit;
+}
+p {
+  text-align: center;
+}
+
+/* 달력 기본 설정 */
+.calendar {
+  --header-height: 50px;
+  --day-row-height: 110px;
+}
+
+/* 달력의 큰 틀 부분 */
+.calendar-container {
+  width: 90%;
+  max-width: 1000px;
+  margin: 20px auto 0;
+}
+
+/* 달력 윗부분 (월과 년도 표시) */
+.calendar-header {
+  position: relative;  /* 부모 */
+  display: flex;  /* 자식 요소들을 Flexbox 방식으로 배치 */
+  align-items: center;
+  /* 월 표시가 위로 잘리지 않도록 헤더 높이 확보 */
+  width: 100%;
+  min-height: 70px;
+  margin-bottom: 5px;
+  font-size: 40px;
+}
+
+/* 월과 버튼 표시 */
+.month-control {
+  position: absolute;  /* 자식 */
+  /* 헤더 안에서 위쪽 기준으로 명확하게 배치 */
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+
+  display: flex;
+  align-items: center;
+  /* 기존 margin-bottom 제거 */
+  margin-bottom: 0;
+  white-space: nowrap;
+}
+
+/* 월 이동 버튼(아이콘으로 표시함) */
+.calendar-header button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: inherit;  /* 40px */
+}
+
+/* 연도표시 */
+#current-year {
+  position: absolute;
+  font-size: 20px;
+  margin-left: 0;
+  top: 5px;
+  right: 0;
+}
+
+/* 요일 + 날짜 표시 부분의 틀 */
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);  /* 7열 */
+  width: 100%;
+
+  /* 달력의 겉테두리 */
+  border: 2px solid #000;
+  border-radius: 10px;
+
+  /* 내부 셀의 테두리가 바깥으로 삐져나오지 않도록 */
+  overflow: hidden;
+}
+
+/* 요일과 날짜의 셀 */
+.week, .day {
+  border-right: 2px solid #000;
+  border-bottom: 2px solid #000;
+  padding: 10px;
+  font-size: 22px;
+}
+
+/* 요일 */
+.week {
+  text-align: center;
+}
+
+/* 날짜 */
+.day {
+  cursor: pointer;
+}
+
+/* 마지막 열(겹쳐서 두꺼워짐을 방지) */
+.calendar > *:nth-child(7n) {
+  border-right: none;
+}
+
+/* 마지막 행(겹쳐서 두꺼워짐을 방지) */
+.calendar > .last-row {
+  border-bottom: none;
+}
+
+/* 테마 + 목표시간 설정 */
+.settings {
+  position: relative;  /* theme-list의 기준점 */
+  margin-top: 5px;
+  display: flex;
+  justify-content: flex-end;  /* 오른쪽 아래로 붙도록 */
+  align-items: center;
+  gap: 10px;
+}
+
+/* 테마 선택 영역 */
+.theme-selector {
+  position: relative;
+}
+
+/* 현재 선택된 테마 원 */
+#theme-button {
+  width: 36px;
+  height: 36px;
+  border: 2px solid #000;
+  border-radius: 50%;
+  cursor: pointer;
+  background-color: #84aabc;
+}
+
+/* 테마 6개를 담는 영역 */
+.theme-list {
+  background-color: white;
+  border: 2px solid #000;
+  border-radius: 10px;
+  position: absolute;
+  right: 100%;  /* theme-selector의 왼쪽에 배치 */
+  bottom: 0;  /* 현재 테마 버튼과 아래쪽을 맞춤 */
+  margin: -5px 10px;
+  width: 250px;
+  display: none;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 8px;
+  z-index: 100;
+}
+
+/* 테마 선택 목록의 버튼 */
+.theme-option {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 테마 원 */
+.theme-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid #000;
+}
+
+/* 테마 색상 */
+.theme-circle.pink {
+  background-color: #e68a8d;
+}
+.theme-circle.orange {
+  background-color: #e6b58a;
+}
+.theme-circle.yellow {
+  background-color: #e6cb8a;
+}
+.theme-circle.green {
+  background-color: #bdd299;
+}
+.theme-circle.blue {
+  background-color: #84aabc;
+}
+.theme-circle.purple {
+  background-color: #9b84bc;
+}
+
+/* 목표시간 드롭다운 */
+#target-time-select {
+  width: 70px;
+  height: 36px;
+  padding: 0 10px;
+  border: 2px solid #000;
+  border-radius: 8px;
+  background-color: white;
+  font-family: inherit;
+  font-size: 17px;
+  cursor: pointer;
+}
+
+/* 시간 입력 라이트박스 전체를 덮는 반투명 검은색 배경 부분 */
+.time-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: none;  /* block이 보이는 것 */
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* 시간 기록 모달 박스 자체 */
+.time-modal-box {
+  width: 400px;
+  height: 280px;
+  max-height: calc(100% - 32px);
+  overflow-y: auto;
+  background-color: white;
+  border-radius: 15px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column; /* time-input과 modal-buttons가 위아래로 */
+  justify-content: space-between;
+  user-select: none;
+}
+
+/* 시간 입력 모달을 드래그하는 손잡이 */
+.modal-drag-handle {
+  width: 100%;
+  height: 25px;
+  cursor: move;
+  flex-shrink: 0;
+  touch-action: none;
+}
+
+/* 시간 입력 부분 */
+.time-input {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
+  font-size: 50px;
+}
+
+/* Picker와 관련된 요소들을 모두 감쌈 */
+.picker-wrapper {
+  position: relative;
+  width: 70px;
+  height: 120px;
+}
+
+/* Picker 가운데에 고정되는 회색원 */
+.picker-circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 75px;
+  height: 75px;
+  transform: translate(-50%, -50%);
+  background-color: rgba(128, 128, 128, 0.2);  /* 연한 회색 */
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* 숫자가 스크롤되는 영역 */
+.picker {
+  position: relative;
+  width: 70px;
+  height: 120px;
+  margin-bottom: 30px;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  scrollbar-width: none;
+  z-index: 2;
+}
+
+/* 숫자들이 들어가는 목록 */
+.picker-list {
+  padding: 40px 0;
+}
+
+/* 숫자 */
+.picker-number {
+  position: relative;
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 40px;
+  font-weight: normal;
+  flex-shrink: 0; 
+  scroll-snap-align: center;
+}
+
+/* 회색 원 안에 들어온 숫자 */
+.picker-number.selected {
+  font-size: 40px;
+  transform: scale(1.25);  /* 숫자 크기 키워주기 */
+}
+
+/* Chrome/Safari 계열 브라우저에서 .picker의 스크롤바를 화면에 표시하지 않도록 하기 위함 */
+.picker::-webkit-scrollbar {
+  display: none;
+}
+
+/* 버튼 묶음들 */
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* 버튼 묶음들 안에 있는 버튼들 */
+.modal-buttons button {
+  border: 1px solid #000;
+  background: white;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+/* 셀 하나의 틀 */
+.day {
+  position: relative;  /* 부모 */
+}
+
+/* 날짜 */
+.date {
+  position: absolute;  /* 자식 */
+  top: 10px;
+  left: 10px;
+}
+
+/* 공부 시간 뒤의 구름 */
+.time-cloud {
+  width: 135px;
+  height: 85px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* 구름 색상 */
+  background-color: #84aabc;
+  /* 구름 이미지 */
+  mask-image: url("images/time-cloud.png");
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-image: url("images/time-cloud.png");
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+}
+
+/* 공부 시간 */
+.study-time {
+  position: absolute;  /* 자식 */
+  /* study-time의 왼쪽 위 모서리를 셀 중앙에 */
+  top: 60%;
+  left: 50%;
+  /* 자신의 너비 만큼 왼쪽으로 반, 위쪽으로 반 */
+  transform: translate(-50%, -50%);
+  width: 150px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  white-space: nowrap;  /* 공백이 있어도 줄바꿈 하지 않도록 */
+}
+
+/* 날짜 옆에 나열된 아이콘들 묶음 */
+.icons {
+  position: absolute;  /* 자식 */
+  top: 12px;
+  left: 33px;
+  display: flex;
+  gap: 2px;
+  /* 아이콘을 다른 요소보다 위에 표시 */
+  z-index: 10;
+}
+
+/* 날짜 옆에 나열된 아이콘 개별 */
+.icons i {
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* 아이콘 입력 라이트박스 전체를 덮는 반투명 검은색 배경 부분 */
+.icon-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1100;  /* time-modal보다 앞에 보여야 함 */
+}
+
+/* 아이콘 모달 박스 자체 */
+.icon-modal-box {
+  width: 450px;
+  max-height: calc(100% - 32px);
+  background-color: white;
+  border-radius: 15px;
+  padding: 30px;
+}
+
+/* 아이콘 선택 목록들 */
+.icon-list {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 7px;
+}
+
+/* 아이콘 선택 목록 개별 */
+.icon-list button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 25px;
+}
+
+/* 아이콘 삭제 확인 라이트박스 전체를 덮는 반투명 검은색 배경 부분 */
+.delete-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1200;
+}
+
+/* 삭제 모달 박스 자체 */
+.delete-modal-box {
+  width: 300px;
+  height: 150px;
+  background-color: white;
+  border-radius: 15px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 20px;
+}
+
+/* 삭제 모달 박스의 확인,취소 버튼 묶음 */
+.delete-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* 삭제 모달 박스의 확인,취소 버튼 개별 */
+.delete-buttons button {
+  border: 1px solid #000;
+  background: white;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+/* 메모 입력 라이트박스 전체를 덮는 반투명 검은색 배경 부분 */
+.memo-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1100;
+}
+
+/* 메모 모달 박스 자체 */
+.memo-modal-box {
+  width: 500px;
+  max-height: calc(100% - 32px);
+  overflow-y: auto;
+  height: 500px;
+  background-color: white;
+  border-radius: 15px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* 메모 영역 스타일 */
+textarea {
+  font-family: inherit;
+  font-size: 20px;
+  padding: 10px;
+  resize: none;
+}
+
+/* 메모 모달 박스의 입력,지우기 버튼 묶음 */
+.memo-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  gap: 10px;
+}
+
+/* 메모 모달 박스의 입력,지우기 버튼 개별 */
+.memo-buttons button {
+  border: 1px solid #000;
+  background: white;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+/* 알림 라이트박스 전체를 덮는 반투명 검은색 배경 부분 */
+.alert-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  /* 다른 모달보다 앞에 표시 */
+  z-index: 1300;
+}
+
+/* 알림 모달 박스 자체 */
+.alert-modal-box {
+  width: 350px;
+  min-height: 150px;
+  background-color: white;
+  border-radius: 15px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 25px;
+}
+
+/* 알림 메시지 */
+#alert-message {
+  font-size: 20px;
+  text-align: center;
+}
+
+/* 확인 버튼 묶음 */
+.alert-buttons {
+  display: flex;
+  justify-content: center;
+}
+
+/* 확인 버튼 */
+.alert-buttons button {
+  border: 1px solid #000;
+  background: white;
+  padding: 8px 25px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+/* 모든 모달이 화면 밖으로 나가지 않도록 설정 */
+.time-modal-box, .icon-modal-box, .delete-modal-box, .memo-modal-box, .alert-modal-box {
+  box-sizing: border-box;
+  max-width: calc(100% - 32px);
+}
+
+/* 반응형 설정은 항상 CSS 맨 아래에 작성 */
+/* 아이패드 세로 (768px ~ 899px) */
+@media (min-width: 768px) and (max-width: 899px) {
+  .calendar {
+    --header-height: 40px;
+    --day-row-height: 90px;
+  }
+
+  /* 달력 헤더 */
+  .calendar-header {
+    min-height: 55px;
+    font-size: 32px;
+  }
+  .month-control {
+    top: 0;
+    margin-bottom: 0;
+  }
+  #current-year {
+    font-size: 17px;
+  }
+
+  /* 요일 + 날짜 셀 */
+  .week, .day {
+    font-size: 17px;
+    padding: 6px;
+  }
+
+  /* 날짜 */
+  .date {
+    top: 6px;
+    left: 6px;
+  }
+
+  /* 아이콘 */
+  .icons {
+    top: 8px;
+    left: 27px;
+  }
+  .icons i {
+    font-size: 12px;
+  }
+
+  /* 공부시간 구름 */
+  .time-cloud {
+    width: 90px;
+    height: 65px;
+  }
+  .study-time {
+    width: 120px;
+    height: 80px;
+    font-size: 23px;
+  }
+}
+
+/* 아이패드 가로 (900px ~ 1199px) */
+@media (min-width: 900px) and (max-width: 1199px) {
+  .calendar {
+    --header-height: 45px;
+    --day-row-height: 100px;
+  }
+  .calendar-header {
+    min-height: 60px;
+    font-size: 36px;
+  }
+  .month-control {
+    top: 0;
+    margin-bottom: 0;
+  }
+  #current-year {
+    font-size: 19px;
+  }
+  .week, .day {
+    font-size: 19px;
+    padding: 8px;
+  }
+  .date {
+    top: 8px;
+    left: 8px;
+  }
+  .icons {
+    top: 10px;
+    left: 32px;
+  }
+  .icons i {
+    font-size: 18px;
+  }
+  .time-cloud {
+    width: 120px;
+    height: 75px;
+  }
+  .study-time {
+    width: 140px;
+    height: 90px;
+    font-size: 27px;
+  }
+}
+
+/* 아이패드 모달 대응 */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .time-modal-box {
+    max-width: calc(100% - 32px);
+  }
+  .icon-modal-box {
+    max-width: calc(100% - 32px);
+  }
+  .memo-modal-box {
+    max-width: calc(100% - 32px);
+    max-height: calc(100% - 32px);
+  }
+}
+
+/* 노트북 1200px 이상 */
+@media (min-width: 1200px) {
+  .calendar {
+    --header-height: 50px;
+    --day-row-height: 110px;
+  }
+  .calendar-header {
+    min-height: 70px;
+    font-size: 40px;
+  }
+  .month-control {
+    top: 0;
+    margin-bottom: 0;
+  }
+  #current-year {
+    font-size: 20px;
+  }
+  .week, .day {
+    font-size: 22px;
+    padding: 10px;
+  }
+  .date {
+    top: 10px;
+    left: 10px;
+  }
+  .icons {
+    top: 12px;
+    left: 37px;
+  }
+  .icons i {
+    font-size: 19px;
+  }
+  .time-cloud {
+    width: 135px;
+    height: 85px;
+  }
+  .study-time {
+    width: 150px;
+    height: 100px;
+    font-size: 30px;
+  }
+}

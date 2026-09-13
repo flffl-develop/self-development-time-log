@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Self-Development Time Log</title>
+  <!-- 아이콘 폰트어썸 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css" 
+  integrity="sha512-QeR2VH+lsBE5LSAe1Q5EnTBbe7XTBubt8dG93Y7gidSgdMCr8nVqKcfKAMyN96SV8KDbZVTDXChatu5G2KQGzg==" 
+  crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="calendar-container">
+
+    <!-- 달력 윗 부분 -->
+    <div class="calendar-header">
+      <!-- 월 표시 -->
+      <div class="month-control">
+        <button id="prev-month">
+          <i class="fa-solid fa-caret-left"></i>
+        </button>
+        <p id="current-month">Sep</p>
+        <button id="next-month">
+          <i class="fa-solid fa-caret-right"></i>
+        </button>
+      </div>
+      <!-- 년도 표시 -->
+      <p id="current-year">2026</p>
+    </div>
+
+    <!-- 달력 요일 부분 -->
+    <div class="calendar">
+      <div class="week">SUN</div>
+      <div class="week">MON</div>
+      <div class="week">TUE</div>
+      <div class="week">WED</div>
+      <div class="week">THU</div>
+      <div class="week">FRI</div>
+      <div class="week">SAT</div>
+    </div>
+
+    <!-- 테마 + 목표시간 설정 -->
+    <div class="settings">
+      <!-- 테마 선택 -->
+      <div class="theme-selector">
+        <!-- 현재 선택된 테마 -->
+        <button id="theme-button"></button>
+          <!-- 테마 선택 목록 -->
+          <div class="theme-list" id="theme-list">
+            <button class="theme-option theme-circle pink" data-theme="pink"></button>
+            <button class="theme-option theme-circle orange" data-theme="orange"></button>
+            <button class="theme-option theme-circle yellow" data-theme="yellow"></button>
+            <button class="theme-option theme-circle green" data-theme="green"></button>
+            <button class="theme-option theme-circle blue" data-theme="blue"></button>
+            <button class="theme-option theme-circle purple" data-theme="purple"></button>
+          </div>
+      </div>
+      <!-- 목표시간 -->
+        <select id="target-time-select">
+          <option value="" disabled selected>T.T</option>
+          <option value="120">2H</option>
+          <option value="180">3H</option>
+          <option value="240">4H</option>
+          <option value="300">5H</option>
+          <option value="360">6H</option>
+          <option value="420">7H</option>
+          <option value="480">8H</option>
+          <option value="540">9H</option>
+          <option value="600">10H</option>
+          <option value="660">11H</option>
+          <option value="720">12H</option>
+        </select>
+    </div>
+
+    <!-- 시간 입력 라이트박스 -->
+    <div class="time-modal" id="time-modal">
+      <div class="time-modal-box">
+
+        <!-- 모달을 움직이는 영역 -->
+        <div class="modal-drag-handle"></div>
+
+        <!-- 시간 기록 부분 -->
+        <div class="time-input">
+          <!-- 시간 -->
+          <div class="picker-wrapper">
+            <div class="picker-circle"></div>
+            <div class="picker">
+              <div id="hour-picker" class="picker-list"></div>
+            </div>
+          </div>
+          <span>H</span>
+          <!-- 분 -->
+          <div class="picker-wrapper">
+            <div class="picker-circle"></div>
+            <div class="picker">
+              <div id="minute-picker" class="picker-list"></div>
+            </div>
+          </div>
+          <span>M</span>
+        </div>
+
+        <!-- 버튼 부분 -->
+        <div class="modal-buttons">
+          <button id="save-time">input</button>
+          <button id="delete-time">delete</button>
+          <button id="icon-button">icon</button>
+          <button id="memo-button">memo</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 아이콘 입력 모달 -->
+    <div class="icon-modal" id="icon-modal">
+      <div class="icon-modal-box">
+
+        <!-- 아이콘 목록(32개) -->
+        <div class="icon-list" id="icon-list">
+          <button data-icon="fa-briefcase">
+            <i class="fa-solid fa-briefcase"></i>
+          </button>
+          <button data-icon="fa-school">
+            <i class="fa-solid fa-school"></i>
+          </button>
+          <button data-icon="fa-house">
+            <i class="fa-solid fa-house"></i>
+          </button>
+          <button data-icon="fa-heart">
+            <i class="fa-solid fa-heart"></i>
+          </button>
+          <button data-icon="fa-star">
+            <i class="fa-solid fa-star"></i>
+          </button>
+          <button data-icon="fa-gift">
+            <i class="fa-solid fa-gift"></i>
+          </button>
+          <button data-icon="fa-film">
+            <i class="fa-solid fa-film"></i>
+          </button>
+          <button data-icon="fa-book">
+            <i class="fa-solid fa-book"></i>
+          </button>
+          <button data-icon="fa-plane">
+            <i class="fa-solid fa-plane"></i>
+          </button>
+          <button data-icon="fa-users">
+            <i class="fa-solid fa-users"></i>
+          </button>
+          <button data-icon="fa-mountain-sun">
+            <i class="fa-solid fa-mountain-sun"></i>
+          </button>
+          <button data-icon="fa-hospital">
+            <i class="fa-solid fa-hospital"></i>
+          </button>
+          <button data-icon="fa-skull">
+            <i class="fa-solid fa-skull"></i>
+          </button>
+          <button data-icon="fa-sack-dollar">
+            <i class="fa-solid fa-sack-dollar"></i>
+          </button>
+          <button data-icon="fa-person-swimming">
+            <i class="fa-solid fa-person-swimming"></i>
+          </button>
+          <button data-icon="fa-person-running">
+            <i class="fa-solid fa-person-running"></i>
+          </button>
+          <button data-icon="fa-graduation-cap">
+            <i class="fa-solid fa-graduation-cap"></i>
+          </button>
+          <button data-icon="fa-duolingo">
+            <i class="fa-brands fa-duolingo"></i>
+          </button>
+          <button data-icon="fa-face-tired">
+            <i class="fa-solid fa-face-tired"></i>
+          </button>
+          <button data-icon="fa-face-surprise">
+            <i class="fa-solid fa-face-surprise"></i>
+          </button>
+          <button data-icon="fa-face-smile-beam">
+            <i class="fa-solid fa-face-smile-beam"></i>
+          </button>
+          <button data-icon="fa-face-sad-tear">
+            <i class="fa-solid fa-face-sad-tear"></i>
+          </button>
+          <button data-icon="fa-face-grin-hearts">
+            <i class="fa-solid fa-face-grin-hearts"></i>
+          </button>
+          <button data-icon="fa-face-angry">
+            <i class="fa-solid fa-face-angry"></i>
+          </button>
+          <button data-icon="fa-dog">
+            <i class="fa-solid fa-dog"></i>
+          </button>
+          <button data-icon="fa-champagne-glasses">
+            <i class="fa-solid fa-champagne-glasses"></i>
+          </button>
+          <button data-icon="fa-cake-candles">
+            <i class="fa-solid fa-cake-candles"></i>
+          </button>
+          <button data-icon="fa-dumbbell">
+            <i class="fa-solid fa-dumbbell"></i>
+          </button>
+          <button data-icon="fa-bag-shopping">
+            <i class="fa-solid fa-bag-shopping"></i>
+          </button>
+          <button data-icon="fa-cart-shopping">
+            <i class="fa-solid fa-cart-shopping"></i>
+          </button>
+          <button data-icon="fa-basket-shopping">
+            <i class="fa-solid fa-basket-shopping"></i>
+          </button>
+          <button data-icon="fa-store">
+            <i class="fa-solid fa-store"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 아이콘 삭제 확인 모달 -->
+    <div class="delete-modal" id="delete-modal">
+      <div class="delete-modal-box">
+        <p>Delete this icon?</p>
+        <div class="delete-buttons">
+          <button id="confirm-delete">yes</button> 
+          <button id="cancel-delete">no</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 알림 모달 -->
+    <div class="alert-modal" id="alert-modal">
+      <div class="alert-modal-box">
+        <!-- 알림 메시지 -->
+        <p id="alert-message"></p>
+        <!-- 확인 버튼 -->
+        <div class="alert-buttons">
+          <button id="confirm-alert">OK</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 메모 입력 부분 -->
+    <div class="memo-modal" id="memo-modal">
+      <div class="memo-modal-box">
+        <textarea name="memo" id="memo" rows="24" cols="6"></textarea>
+        <div class="memo-buttons">
+          <button id="input-memo">input</button>
+          <button id="delete-memo">delete</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <script src = "script.js"></script>
+</body>
+</html>
