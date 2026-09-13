@@ -11,11 +11,11 @@ A personal web app for recording and tracking daily self-development time.
 - Use the app without creating an account
 
 ## Tech Stack
--HTML
--CSS
--JavaScript
--LocalStorage
--GitHub Pages
+- HTML
+- CSS
+- JavaScript
+- LocalStorage
+- GitHub Pages
 
 ## Copyright
 © 2026 Haeun Huh. All rights reserved.
@@ -26,9 +26,9 @@ The source code, design, layout, and original assets may not be copied, modified
 https://flffl-develop.github.io/self-development-time-log/
 
 ## Credits
--Icons provided by [Font Awesome](https://fontawesome.com/)
--Fonts provided by [Google Fonts](https://fonts.google.com/)
+- Icons provided by [Font Awesome](https://fontawesome.com/)
+- Fonts provided by [Google Fonts](https://fonts.google.com/)
 
 ## Licenses
--Font Awesome Free: CC BY 4.0, STL OFL 1.1, and MIT License
--Google Fonts: Individual font licenses may vary. Please refer to the license of each font family.
+- Font Awesome Free: CC BY 4.0, STL OFL 1.1, and MIT License
+- Google Fonts: Individual font licenses may vary. Please refer to the license of each font family.
