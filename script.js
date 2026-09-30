@@ -159,7 +159,7 @@ function getMonthKey() {
 
 // 현재 날짜를 Key로 만들기
 function getDateKey(date) {
-  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;  // ex) "2026-09-12"
+  return `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(date).padStart(2, "0")}`;  // ex) "2026-09-12"
 }
 
 // 현재 월 설정 가져오기(테마 + 목표시간)
@@ -295,87 +295,83 @@ function renderCalendar() {
       day.classList.add("last-row");
     }
 
-    // 이번 달이 끝난 뒤의 빈칸은 기존처럼 완전한 빈칸으로 유지한다.
-    if(i >= totalDays) {
-      calendar.appendChild(day);
-      continue;
-    }
+    // 날짜가 표시되는 부분의 조건문 
+    if(i >= startDay && i < totalDays) {
+      const date = i - startDay + 1;  // 날짜 구하기
 
-    const cellDate = new Date(currentYear, currentMonth, i-startDay+1);
-    const dateKey = getDateKey(cellDate);
+      // 날짜 Key
+      const dateKey = getDateKey(date);
 
-    // 현재 달의 날짜인지 확인
-    const isCurrentMonth = cellDate.getMonth() === currentMonth && cellDate.getFullYear() === currentYear;
+      // 날짜 요소 제작
+      const dateElement = document.createElement("span");  // span 요소 만들기
+      dateElement.classList.add("date");  // class="date" 추가
+      dateElement.textContent = date;  // 날짜 텍스트 추가
 
-    // 실제 날짜 Key를 셀에 저장
-    day.dataset.dateKey = dateKey;
+      // 아이콘 요소 제작
+      const iconContainer = document.createElement("div");  // icon들을 담을 그릇 div 제작
+      iconContainer.classList.add("icons");  // class="icons" 추가
 
-    // 현재 달의 날짜만 화면에 숫자로 표시
-    // 이전 달의 앞쪽 셀은 화면상 빈칸으로 유지
-    if(isCurrentMonth) {
-      const dateElement = document.createElement("span");
-      dateElement.classList.add("date");
-      dateElement.textContent = cellDate.getDate();
-      day.appendChild(dateElement);
-    }
+      // 셀 안에 있는 아이콘 영역 클릭 이벤트
+      iconContainer.addEventListener("click", event => {
+        event.stopPropagation();  // 셀 클릭 이벤트가 실행되는 것을 방지
 
-    // 아이콘 요소 제작
-    const iconContainer = document.createElement("div");
-    iconContainer.classList.add("icons");
-
-    // 셀 안의 아이콘 클릭 이벤트
-    iconContainer.addEventListener("click", event => {
-      event.stopPropagation();  // 셀 클릭 이벤트가 실행되는 것을 방지
-
-      // 실제로 클릭한 요소가 아이콘인지 확인
-      const clickedIcon = event.target.closest("i");
-      if(!clickedIcon) {
-        return;
-      }
+        // 실제로 클릭한 요소가 아이콘인지 확인
+        const clickedIcon = event.target.closest("i");
+        if(!clickedIcon) {
+          return;
+        }
         
-      // 클릭된 아이콘 그릇을 담고 있는 날짜 기억
-      selectedDateKey = dateKey;
-      // 클릭한 아이콘 요소 기억
-      selectedIconElement = clickedIcon;
-      // 시간 입력 모달 닫기
-      timeModal.style.display = "none";
-      // 아이콘 삭제 모달 열기
-      deleteModal.style.display = "flex";
-    });
+        // 클릭된 아이콘 그릇을 담고 있는 날짜 기억
+        selectedDateKey = dateKey;
+        // 클릭한 아이콘 요소 기억
+        selectedIconElement = clickedIcon;
+        // 시간 입력 모달 닫기
+        timeModal.style.display = "none";
+        // 아이콘 삭제 모달 열기
+        deleteModal.style.display = "flex";
+      });
 
-    // 공부 시간 표시 영역
-    const timeElement = document.createElement("span")
-    timeElement.classList.add("study-time")
+      // 시간 요소 제작
+      const timeElement = document.createElement("span");  // span 요소 만들기
+      timeElement.classList.add("study-time");  // class="study-time" 추가
 
-    day.appendChild(iconContainer);
-    day.appendChild(timeElement);
+      // day(부모)에 자식 요소들 붙여주기
+      day.appendChild(dateElement);
+      day.appendChild(iconContainer);
+      day.appendChild(timeElement);
 
-    // 저장되어 있는 기록 가져오기
-    const record = calendarRecords[dateKey];
+      // 기존 기록 불러오기
+      // 화면에 표시되는 내용은 아이콘과 공부시간으로 메모는 메모 버튼을 눌렀을 때 내용이 표시된다.
+      const record = calendarRecords[dateKey];
 
-    // 저장된 아이콘 표시
-    if(record && record.icons) {
-      record.icons.forEach(iconClass => {
-        createIcon(iconClass, iconContainer);
+      // 기존 아이콘 표시
+      if(record && record.icons) {
+        record.icons.forEach(iconClass => {
+          createIcon(iconClass, iconContainer);
+        });
+      }
+
+      // 기존 시간 표시
+      if(record && record.minutes !== undefined) {
+        displayStudyTime(timeElement, record.minutes);
+      }
+
+      // 날짜 셀을 클릭했을 때의 이벤트
+      day.addEventListener("click", (event) => {
+        selectedDateKey = dateKey;  // 현재 클릭한 날짜 정보 기억
+        selectedIconContainer = iconContainer;  // 현재 클릭한 날짜의 아이콘 영역 기억
+        selectedTimeElement = timeElement;  // 현재 클릭한 날짜의 시간 영역 기억
+
+        // 시간 입력 모달 열기
+        timeModal.style.display = "flex";
+
+        // 모달이 열린 다음 Picker를 0H 0M으로 초기화
+        requestAnimationFrame(() => {
+          resetPickers();
+        });
       });
     }
-
-    // 저장된 공부 시간 표시
-    if(record && record.minutes !== undefined) {
-      displayStudyTime(timeElement, record.minutes);
-    }
-
-    // 날짜 클릭 이벤트
-    day.addEventListener("click", () => {
-      selectedDateKey = dateKey;
-      selectedIconContainer = iconContainer;
-      selectedTimeElement = timeElement;
-      timeModal.style.display = "flex"
-      requestAnimationFrame(() => {
-        resetPickers();
-      });
-    });
-    calendar.appendChild(day);
+    calendar.appendChild(day);  // 달력(부모)에 날짜 요소들 붙여주기
   }
   // 테마 적용
   applyCurrentTheme();
@@ -404,8 +400,9 @@ function updateAllCloudColors() {
     if(!cloud) {  // 구름이 없으면 return
       return;
     }
-   
-    const dateKey = day.dataset.dateKey;
+    const dateElement = day.querySelector(".date");  // 셀에서 날짜 요소 가져오기
+    const date = dateElement.textContent;  // 날짜 요소에서 날짜를 가져오기
+    const dateKey = getDateKey(Number(date));  // 날짜를 사용해 날짜 Key 얻어내기
     const record = calendarRecords[dateKey];  // 날짜 Key를 사용해 기록 얻어내기
 
     // 기록이 없다면 구름 색상 업데이트할 필요 없음
